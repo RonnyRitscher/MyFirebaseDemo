@@ -184,6 +184,20 @@ public class LoginActivity extends AppCompatActivity implements View .OnClickLis
 
     private void sendEmailVerification() {  //SENDEN EINER VALIDIERUNG
 
+        findViewById(R.id.verifyEmailButton).setEnabled(false);// Deaktivieren des VerifizierungsButton
+        final FirebaseUser user = auth.getCurrentUser();
+        user.sendEmailVerification().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                findViewById(R.id.verifyEmailButton).setEnabled(true);// Aktivieren des VerifizierungsButton
+                if(task.isSuccessful()){
+                    Toast.makeText(LoginActivity.this, "Verification mail send to " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(LoginActivity.this, "Faild to send verification email to " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private boolean valdateForm() {     //EINGABEN DER EMAIL UND PASSWORT PRÜFEN(validieren)
