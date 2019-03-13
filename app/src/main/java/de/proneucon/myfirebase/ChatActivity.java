@@ -37,7 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
 
     EditText input , user;
     TextView output;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 //            @Override
 //            public void onCancelled(@NonNull DatabaseError databaseError) {
 //                //WENN FEHLER PASSIEREN
-//                Toast.makeText(MainActivity.this, "Fehler beim lesen der Daten", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ChatActivity.this, "Fehler beim lesen der Daten", Toast.LENGTH_SHORT).show();
 //            }
 //        });
 
