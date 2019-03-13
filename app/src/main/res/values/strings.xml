@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyFirebase</string>
+    <string name="senden">senden</string>
+    <string name="text_eingeben">Text eingeben...</string>
+</resources>
