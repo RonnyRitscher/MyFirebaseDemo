@@ -20,28 +20,34 @@ package de.proneucon.myfirebase;
  * - RealtimeDatabase -> Regeln -> lesen und schreiben erlauben (true)
  */
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class ChatActivity extends AppCompatActivity {
 
-    EditText input , user;
-    TextView output;
+    EditText et_input, et_user;
+    TextView tv_output;
     Button send;
+
+    private FirebaseAuth auth; //Declare an instance of FirebaseAuth
+    private FirebaseUser user;
 
     FirebaseDatabase database; //Hier kann nun die Firebase verwendet werden nach dem configurieren
     DatabaseReference reference; //Referenz auf die Database
@@ -53,15 +59,19 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //initialisieren der Elemente/Members
-        input = findViewById(R.id.et_input);
-        output= findViewById(R.id.tv_output);
-        user = findViewById(R.id.et_user);
+        et_input = findViewById(R.id.et_input);
+        tv_output = findViewById(R.id.tv_output);
+        et_user = findViewById(R.id.et_user);
         send = findViewById(R.id.btn_send);
 
-        output.setText(""); //output leeren
+        tv_output.setText(""); //tv_output leeren
 
         Message fromServer = new Message(); // Message erstellen
 
+        //initialisieren der User-Daten
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        et_user.setText(user.getEmail());
 
         //initialisieren der Firebase und Reference
         database = FirebaseDatabase.getInstance(); //findet automatisch die angebundene database
@@ -78,8 +88,8 @@ public class ChatActivity extends AppCompatActivity {
 //                //>>String value = dataSnapshot.getValue(String.class); //!beim holen des Strings muss der Parameter (String.class) angegeben werden
 //                Message value = dataSnapshot.getValue(Message.class); //!beim holen des Strings muss der Parameter (String.class) angegeben werden
 //                if(value!=null){
-//                    //>>output.setText(value);  //Ausgeben des Values in der TextView
-//                    output.setText(value.getUser() + ": " + value.getText());  //Ausgeben des Values in der TextView
+//                    //>>tv_output.setText(value);  //Ausgeben des Values in der TextView
+//                    tv_output.setText(value.getUser() + ": " + value.getText());  //Ausgeben des Values in der TextView
 //                }
 //
 //            }
@@ -99,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
                 //wie bei dem addValueEventListener!
                 Message value = dataSnapshot.getValue(Message.class);
                 if(value!=null){
-                    output.append(value.getUser() + ": " + value.getText() +"\n");  //APPEND
+                    tv_output.append(value.getUser() + ": " + value.getText() +"\n");  //APPEND
                 }
             }
 
@@ -127,12 +137,40 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
+    //**************************************
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Menu einbinden über den menuinflater
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.it_logout:
+                auth.signOut();         //Methode signOut() über den auth
+                //Aufruf der Login Seite
+                Intent intent = new Intent(this , LoginActivity.class);
+                startActivity(intent);
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //****************************************
+
     //ON-CLICK des Buttons btn_send
     public void send(View view) {
         //verknüpfen der referens mit dem send_button
 
-        Message message = new Message(user.getText().toString() , input.getText().toString());
-        //>>reference.setValue(input.getText().toString());   //! haben probleme bei Arrays, gut mit Strings
+        Message message = new Message(et_user.getText().toString() , et_input.getText().toString());
+        //>>reference.setValue(et_input.getText().toString());   //! haben probleme bei Arrays, gut mit Strings
 
 
         //keine feste ChildReferen, nur über push... dann gibt es für jeden Eintrag eine eindeutige ID unter "message" in der DB
@@ -140,7 +178,8 @@ public class ChatActivity extends AppCompatActivity {
         childReference = reference.push(); // fügt nur eine eindeutige ID (ohne unterpunkt) hinzu
         childReference.setValue(message);
         //...->nun benötigen wir einen ChildEventListener
-
-
     }
+
+
+
 }
