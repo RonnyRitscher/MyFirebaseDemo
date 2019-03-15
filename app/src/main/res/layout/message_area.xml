@@ -20,7 +20,7 @@
         android:inputType="textPersonName" />
 
     <ImageView
-        android:id="@+id/btn_send"
+        android:id="@+id/iv_sendButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="5"

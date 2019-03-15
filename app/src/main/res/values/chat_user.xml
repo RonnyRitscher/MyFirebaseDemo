@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- sinnvoll hier Datenbank zu verwenden um neue User anlegen zu können-->
+    <string-array name="chat_user">
+        <item>r.k.ritscher@web.de</item>
+        <item>proneucon@gmail.com</item>
+
+
+    </string-array>
+
+</resources>

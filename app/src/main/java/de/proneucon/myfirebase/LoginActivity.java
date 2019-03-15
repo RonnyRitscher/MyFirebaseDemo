@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View .OnClickLis
                     Log.d(TAG, "onOptionsItemSelected: currentUser != null");
                     if( currentUser.isEmailVerified() && !fromChat ){       //Testet ob verifiziert und ob der User aus der ChatActivity kommt
                         Log.d(TAG, "onOptionsItemSelected: currentUser.isEmailVerified() && !fromChat");
-                        Intent intent = new Intent(this , ChatActivity.class);
+                        Intent intent = new Intent(this , SelectChatWithActivity.class); //zur SelectChatWithActivity
                         fromChat=true;
                         Log.d(TAG, "onOptionsItemSelected: fromChat=true;");
                         Log.d(TAG, "onOptionsItemSelected: startActivity ChatActivity");
@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View .OnClickLis
     }
 
     //**************************************************
-    //METHODE updateUI
+    //METHODE updateUI -> hier wird der Intent gebaut
     private void updateUI(FirebaseUser currentUser) {
         //Log.d(TAG, "updateUI: ");
         hideProgressDialog();   //verstecken der FortschritsAnzeige
@@ -148,7 +148,8 @@ public class LoginActivity extends AppCompatActivity implements View .OnClickLis
         if(currentUser!=null){
             //WEITERLEITUNG von dem LogIn zum AppContent/ChatApp
             if( currentUser.isEmailVerified() && !fromChat ){       //Testet ob verifiziert und ob der User aus der ChatActivity kommt
-                Intent intent = new Intent(this , ChatActivity.class);
+                Intent intent = new Intent(this , SelectChatWithActivity.class); //Starten  der ChatPartner
+                 //
                 fromChat=true;
                 Log.d(TAG, "updateUI: startActivity ChatActivity");
                 startActivity(intent);
